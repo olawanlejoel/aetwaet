@@ -35,8 +35,7 @@ payable contract AeTwaet =
       avatar = avatar',
       twaetBody = twaet',
       totalTips = 0,
-      tipsCount = 0,
-      likeCount = 0}
+      tipsCount = 0}
 
     put(state{twaets[id'] = newTwaet})
 
@@ -52,41 +51,27 @@ payable contract AeTwaet =
       avatar = twaet.avatar,
       twaetBody = twaet.twaetBody,
       totalTips = newTotalTips,
-      tipsCount = newTipsCount,
-      likeCount = twaet.likeCount}
+      tipsCount = newTipsCount}
     put(state{twaets[id'] = updatedTwaet})
-    
-  // like a post
-  stateful entrypoint likeTwaet(id') =
-    let twaet = getTwaet(id')
-    let updatedLikeCount = twaet.likeCount + 1
-    let updatedTwaets = state.twaets{ [id'].likeCount = updatedLikeCount }
-    put(state{twaets = updatedTwaets})
-    
-  // Unlike a post
-  stateful entrypoint unlikeTwaet(id') =
-    let twaet = getTwaet(id')
-    let updatedLikeCount = twaet.likeCount - 1
-    let updatedTwaets = state.twaets{ [id'].likeCount = updatedLikeCount }
-    put(state{twaets = updatedTwaets}) 
+
 `;
 
-const contractAddress = 'ct_2fc8LXC3LBA5eAfQ3rBrUFxDYLDJdAcF1ZfxdDfEEk9Nv3x9Tv';
+const contractAddress = 'ct_2FbRnVk8aJQyc2UmGxwYsQWVBXy99VM8sGj1dUGazCXEkA1AP9';
 
 let client = null;
 
 let twaetData = [];
 
-let twaetsContainer = document.querySelector('.tweets__container');
+let twaetsContainer = document.querySelector('.twaets__container');
 
 // Attach event listener to the floating button
 document.querySelector('.float__btn').addEventListener('click', function(){
-  document.querySelector('.tweets__entry').classList.add('show-modal');
+  document.querySelector('.twaets__entry').classList.add('show-modal');
 });
 
 // Attach event listener to the close button on the form modal container
 document.querySelector('#close-form').addEventListener('click', function(){
-  document.querySelector('.tweets__entry').classList.remove('show-modal');
+  document.querySelector('.twaets__entry').classList.remove('show-modal');
 });
 
 /* 
@@ -256,6 +241,33 @@ const createTwaetPanel = item=>{
   submitBtn.setAttribute('type', 'button');
   twaetAction.appendChild(submitBtn);
 
+  /* --------
+Attach a click event listener to all tip button in a twaet panel. This triggers a tipTwaet on the contract */
+submitBtn.addEventListener('click', async function(e){
+  // show spinner
+  toggleSpinner(true);
+  
+  // twaet info
+  let twaetId = twaetPanel.id;
+  let tipAmount = parseInt(twaetInput.value);
+   
+  await contractCall('tipTwaet', [twaetId], tipAmount);
+  
+  // update twaetData
+  twaetData.filter(item =>{
+    if(item[0] === twaetId){
+      item[1].tipsCount += 1;
+      item[1].totalTips += parseInt(tipAmount, 10);
+    }
+  });
+  
+    // render Twaets
+    renderTwaets();
+  
+    // hide spinner
+    toggleSpinner(false);
+});
+
   return twaetPanel;
 }
 
@@ -271,3 +283,44 @@ const renderTwaets =()=>{
    // append panels to the twaets container
    twaetsContainer.appendChild(docFrag);
 }
+
+/* ---------
+Attach a submit listener to the form element. Create and submit a new twaet when the form is submitted. This triggers the addTwaet on the contract */
+document.querySelector('#twaet-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  // show spinner
+  toggleSpinner(true);
+
+  // grab form inputs
+  let nameEntry = document.querySelector('#name');
+  let avatarEntry = document.querySelector('#avatar');
+  let twaetEntry = document.querySelector('#twaet');
+
+  await contractCall('addTwaet', [Date.now(), nameEntry.value, avatarEntry.value, twaetEntry.value], 0);
+
+  // Push new twaet to twaetData
+  twaetData.push([
+    Date.now(),
+    {
+      avatar: avatarEntry,
+      name: nameEntry,
+      tipsCount: 0,
+      totalTips: 0,
+      twaetBody: twaetEntry
+    }
+  ]);
+
+  // clear form entries
+  nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
+
+  // close form modal
+  document.querySelector('#close-form').click();
+
+  // render Twaets
+  renderTwaets();
+
+  // hide spinner
+  toggleSpinner(false);
+
+});

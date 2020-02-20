@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeTweet - Aeternity has it happens</title>
+    <title>AeTwaet - Aeternity has it happens</title>
     <link rel="shortcut icon" href="logo.png" type="image/png">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -19,13 +19,12 @@
             <!-- Header Title -->
             <h1>AeTwaet</h1>
         </header>
-        <!-- Tweets Container -->
-        <section class="tweets__container">
+        <!-- Twaets Container -->
+        <section class="twaets__container"></section>
 
-        </section>
-        <!-- New Tweets Form -->
-        <section class="tweets__entry modal">
-            <form method="post">
+        <!-- New Twaets Form -->
+        <section class="twaets__entry modal">
+            <form method="post" id="twaet-form">
                 <div class="form__header">
                     <h2>Add New Twaet</h2>
                     <button type="button" id="close-form">&#10005</button>
@@ -36,8 +35,8 @@
                 <label for="avatar">Avatar</label>
                 <input type="url" name="avatar" id="avatar" required placeholder="https://directory/my_avatar.jpeg">
 
-                <label for="tweet">Tweet</label>
-                <textarea name="tweet" id="tweet" cols="30" rows="10"  required placeholder="Aeternity is awesome" size="160" maxlength="160"></textarea>
+                <label for="twaet">Twaet</label>
+                <textarea name="twaet" id="twaet" cols="30" rows="10"  required placeholder="Aeternity is awesome" size="160" maxlength="160"></textarea>
 
                 <button type="submit" class="btn">Twaet</button>
             </form>
@@ -48,10 +47,12 @@
             <div class="spinner"></div>
             <h4 class="spinner__text">Loading...</h4>
         </section>
+
+        <!-- Float Button -->
         <button class="float__btn">+</button>
     </main>
 
-    <script src="https://unpkg.com/@aeternity/aepp-sdk@6.1.2/dist/aepp-sdk.browser-script.js"></script>
+    <!-- <script src="https://unpkg.com/@aeternity/aepp-sdk@6.1.2/dist/aepp-sdk.browser-script.js"></script> -->
     <script src="main.js"></script>
 </body>
 </html>
