@@ -284,7 +284,7 @@ const renderTwaets =()=>{
   while(twaetsContainer.firstElementChild){
     twaetsContainer.removeChild(twaetsContainer.firstElementChild);
   }
-  
+
   // append panels to the twaets container
   twaetsContainer.appendChild(docFrag);
 }
@@ -302,11 +302,11 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   let avatarEntry = document.querySelector('#avatar');
   let twaetEntry = document.querySelector('#twaet');
 
-  await contractCall('addTwaet', [Date.now(), nameEntry.value, avatarEntry.value, twaetEntry.value], 0);
+  await contractCall('addTwaet', [Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value], 0);
 
   // Push new twaet to twaetData
   twaetData.push([
-    Date.now(),
+    Date.now().toString(),
     {
       avatar: avatarEntry.value,
       name: nameEntry.value,
