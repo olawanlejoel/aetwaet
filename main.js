@@ -280,8 +280,13 @@ const renderTwaets =()=>{
      docFrag.appendChild(createTwaetPanel(item))
    });
 
-   // append panels to the twaets container
-   twaetsContainer.appendChild(docFrag);
+  //  remove exisiting children for twaets container
+  while(twaetsContainer.firstElementChild){
+    twaetsContainer.removeChild(twaetsContainer.firstElementChild);
+  }
+  
+  // append panels to the twaets container
+  twaetsContainer.appendChild(docFrag);
 }
 
 /* ---------
@@ -303,11 +308,11 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   twaetData.push([
     Date.now(),
     {
-      avatar: avatarEntry,
-      name: nameEntry,
+      avatar: avatarEntry.value,
+      name: nameEntry.value,
       tipsCount: 0,
       totalTips: 0,
-      twaetBody: twaetEntry
+      twaetBody: twaetEntry.value
     }
   ]);
 
