@@ -56,7 +56,7 @@ payable contract AeTwaet =
 
 `;
 
-const contractAddress = 'ct_2FbRnVk8aJQyc2UmGxwYsQWVBXy99VM8sGj1dUGazCXEkA1AP9';
+const contractAddress = 'ct_NXAxmKBnwDzCHRMw7MhQngacu4ECCvV7Ep3gFXPNg3kdNGJqy';
 
 let client = null;
 
