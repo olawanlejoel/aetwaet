@@ -16,7 +16,7 @@ payable contract AeTwaet =
   stateful entrypoint init(): state = {twaets={}}
 
   // get a twaet
-  entrypoint getTwaet(id') = 
+  entrypoint getTwaet(id' : string) = 
     switch(Map.lookup(id', state.twaets))
       None => abort("There is no twaet with this id")
       Some(x) => x
@@ -27,7 +27,7 @@ payable contract AeTwaet =
 
 
   // add a twaet
-  stateful entrypoint addTwaet(id', name', avatar', twaet') =
+  stateful entrypoint addTwaet(id' :string, name' : string, avatar' : string, twaet' : string) =
 
     let newTwaet = {
       writerAddress = Call.caller,
@@ -40,7 +40,7 @@ payable contract AeTwaet =
     put(state{twaets[id'] = newTwaet})
 
   // Tip a twaet
-  payable stateful entrypoint tipTwaet(id', amount') =
+  payable stateful entrypoint tipTwaet(id': string) =
     let twaet = getTwaet(id')
     Chain.spend(twaet.writerAddress, Call.value)
     let newTotalTips = twaet.totalTips + Call.value
