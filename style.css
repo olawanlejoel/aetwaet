@@ -73,7 +73,8 @@ img {
   margin-right: 1em;
   width: 2em;
   height: 2em;
-  flex-basis: 30%; }
+  flex-basis: 30%;
+  overflow: hidden; }
 
 .twaet__name {
   margin-right: 0.5em;
