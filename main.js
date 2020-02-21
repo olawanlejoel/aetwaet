@@ -58,9 +58,7 @@ payable contract AeTwaet =
 
 const contractAddress = 'ct_NXAxmKBnwDzCHRMw7MhQngacu4ECCvV7Ep3gFXPNg3kdNGJqy';
 
-let client = null;
-
-let twaetData = [];
+let client = null, contractInstance = null, twaetData = [];
 
 let twaetsContainer = document.querySelector('.twaets__container');
 
@@ -84,41 +82,19 @@ function toggleSpinner(state){
   }
 }
 
-// Contract Call
- async function contractCall(func, args, value) {
-  const contract = await client.getContractInstance(contractSource, {contractAddress});
-  //Make a call to write smart contract func, with aeon value input
-  const query = await contract.call(func, args, {amount: value}).catch(e => console.error(e));
-
-  return query;
-}
-
-// Call Static
-async function callStatic(func, args) {
-  //Create a new contract instance 
-  const contract = await client.getContractInstance(contractSource, {contractAddress});
-  //Make a call to get data of smart contract func, with specefied arguments
-  const query = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
-  //Make another call to decode the data received in first call
-  const decodedResponse = await query.decode().catch(e => console.error(e));
-
-  return decodedResponse;
-}
-
 window.addEventListener('load', async function(){
   // Display the spinner modal
   toggleSpinner(true);
 
   //Initialize the Aepp object 
   client = await Ae.Aepp();
-
+  contractInstance = await client.getContractInstance(contractSource, {contractAddress});
+  
   // Make a call to fetch all twaets available on the blockchain
-  const allTwaets = await callStatic('getAllTwaets', []);
+  twaetData = (await contractInstance.methods.getAllTwaets()).decodedResult;
 
   // check if data is returned
-  if(allTwaets){
-    twaetData = allTwaets;
-
+  if(twaetData){
     // display twaets
     renderTwaets();
   } else{
@@ -251,21 +227,29 @@ submitBtn.addEventListener('click', async function(e){
   let twaetId = twaetPanel.id;
   let tipAmount = parseInt(twaetInput.value);
    
-  await contractCall('tipTwaet', [twaetId], tipAmount);
-  
-  // update twaetData
-  twaetData.filter(item =>{
-    if(item[0] === twaetId){
-      item[1].tipsCount += 1;
-      item[1].totalTips += parseInt(tipAmount, 10);
-    }
+  // update data on the blockchain
+  await contractInstance.methods.tipTwaet(twaetId, {amount: tipAmount})
+  .then(()=>{
+    location.reload();
+    console.log('Data updated...');
+  })
+  .catch(e => {
+    console.log(e);
+    return false;
   });
+  // update twaetData
+  // twaetData.filter(item =>{
+  //   if(item[0] === twaetId){
+  //     item[1].tipsCount += 1;
+  //     item[1].totalTips += parseInt(tipAmount, 10);
+  //   }
+  // });
   
     // render Twaets
-    renderTwaets();
+    // renderTwaets();
   
     // hide spinner
-    toggleSpinner(false);
+    // toggleSpinner(false);
 });
 
   return twaetPanel;
@@ -302,19 +286,28 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   let avatarEntry = document.querySelector('#avatar');
   let twaetEntry = document.querySelector('#twaet');
 
-  await contractCall('addTwaet', [Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value], 0);
+  await contractCall('addTwaet', [], 0);
+  await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value)
+    .then(()=>{
+      location.reload();
+      console.log('Successfully added new twaet');
+    })
+    .catch(e => {
+      console.log(e);
+      return false;
+    });
 
   // Push new twaet to twaetData
-  twaetData.push([
-    Date.now().toString(),
-    {
-      avatar: avatarEntry.value,
-      name: nameEntry.value,
-      tipsCount: 0,
-      totalTips: 0,
-      twaetBody: twaetEntry.value
-    }
-  ]);
+  // twaetData.push([
+  //   Date.now().toString(),
+  //   {
+  //     avatar: avatarEntry.value,
+  //     name: nameEntry.value,
+  //     tipsCount: 0,
+  //     totalTips: 0,
+  //     twaetBody: twaetEntry.value
+  //   }
+  // ]);
 
   // clear form entries
   nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
