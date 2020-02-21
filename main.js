@@ -287,8 +287,7 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   let nameEntry = document.querySelector('#name');
   let avatarEntry = document.querySelector('#avatar');
   let twaetEntry = document.querySelector('#twaet');
-
-  await contractCall('addTwaet', [], 0);
+	
   await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value)
     .then(()=>{
       // refetch data from the blockchain
