@@ -84,7 +84,7 @@ function toggleSpinner(state){
 
 /* -----
 The function fetches data from the blockchain on every call */
-function fetchData(){
+async function fetchData(){
    //Initialize the Aepp object 
    client = await Ae.Aepp();
    contractInstance = await client.getContractInstance(contractSource, {contractAddress});
