@@ -259,10 +259,10 @@ submitBtn.addEventListener('click', async function(e){
 
 /* --------
 The function renders the twaets panel */
-const renderTwaets =()=>{
+async function renderTwaets(){
    // map the content of twaetData to create twaet panels
    const docFrag = document.createDocumentFragment();
-   twaetData.sort().map(item =>{
+   (await twaetData).sort().map(item =>{
      docFrag.appendChild(createTwaetPanel(item))
    });
 
