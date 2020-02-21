@@ -83,6 +83,8 @@ function toggleSpinner(state){
 }
 
 window.addEventListener('load', async function(){
+  console.log('Displaying up-to-date file');
+
   // Display the spinner modal
   toggleSpinner(true);
 
@@ -231,7 +233,6 @@ submitBtn.addEventListener('click', async function(e){
   await contractInstance.methods.tipTwaet(twaetId, {amount: tipAmount})
   .then(()=>{
     location.reload();
-    console.log('Data updated...');
   })
   .catch(e => {
     console.log(e);
@@ -290,7 +291,6 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value)
     .then(()=>{
       location.reload();
-      console.log('Successfully added new twaet');
     })
     .catch(e => {
       console.log(e);
@@ -310,15 +310,15 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   // ]);
 
   // clear form entries
-  nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
+  // nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
 
   // close form modal
-  document.querySelector('#close-form').click();
+  // document.querySelector('#close-form').click();
 
   // render Twaets
-  renderTwaets();
+  // renderTwaets();
 
   // hide spinner
-  toggleSpinner(false);
+  // toggleSpinner(false);
 
 });
