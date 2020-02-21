@@ -83,7 +83,7 @@ function toggleSpinner(state){
 }
 
 window.addEventListener('load', async function(){
-  console.log('Displaying up-to-date file');
+  console.log('Displaying up-to-date file -v2');
 
   // Display the spinner modal
   toggleSpinner(true);
@@ -232,25 +232,17 @@ submitBtn.addEventListener('click', async function(e){
   // update data on the blockchain
   await contractInstance.methods.tipTwaet(twaetId, {amount: tipAmount})
   .then(()=>{
-    location.reload();
+    // refetch data from the blockchain
+    twaetData = (await contractInstance.methods.getAllTwaets()).decodedResult;
+    // display the new data
+    renderTwaets();
+    // hide spinner
+    toggleSpinner(false);
   })
   .catch(e => {
     console.log(e);
     return false;
-  });
-  // update twaetData
-  // twaetData.filter(item =>{
-  //   if(item[0] === twaetId){
-  //     item[1].tipsCount += 1;
-  //     item[1].totalTips += parseInt(tipAmount, 10);
-  //   }
-  // });
-  
-    // render Twaets
-    // renderTwaets();
-  
-    // hide spinner
-    // toggleSpinner(false);
+  });  
 });
 
   return twaetPanel;
@@ -290,35 +282,23 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   await contractCall('addTwaet', [], 0);
   await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value)
     .then(()=>{
-      location.reload();
+      // refetch data from the blockchain
+      twaetData = (await contractInstance.methods.getAllTwaets()).decodedResult;
+      
+      // clear form entries
+      nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
+
+      // close form modal
+      document.querySelector('#close-form').click();
+
+      // render Twaets
+      renderTwaets();
+
+      // hide spinner
+      toggleSpinner(false);
     })
     .catch(e => {
       console.log(e);
       return false;
     });
-
-  // Push new twaet to twaetData
-  // twaetData.push([
-  //   Date.now().toString(),
-  //   {
-  //     avatar: avatarEntry.value,
-  //     name: nameEntry.value,
-  //     tipsCount: 0,
-  //     totalTips: 0,
-  //     twaetBody: twaetEntry.value
-  //   }
-  // ]);
-
-  // clear form entries
-  // nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
-
-  // close form modal
-  // document.querySelector('#close-form').click();
-
-  // render Twaets
-  // renderTwaets();
-
-  // hide spinner
-  // toggleSpinner(false);
-
 });
