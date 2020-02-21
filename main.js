@@ -82,18 +82,27 @@ function toggleSpinner(state){
   }
 }
 
+/* -----
+The function fetches data from the blockchain on every call */
+function fetchData(){
+   //Initialize the Aepp object 
+   client = await Ae.Aepp();
+   contractInstance = await client.getContractInstance(contractSource, {contractAddress});
+   
+   // Make a call to fetch all twaets available on the blockchain
+    let data = (await contractInstance.methods.getAllTwaets()).decodedResult;
+
+  return data;
+}
+
 window.addEventListener('load', async function(){
-  console.log('Displaying up-to-date file -v2');
+  console.log('Displaying up-to-date file -v2.1');
 
   // Display the spinner modal
   toggleSpinner(true);
 
-  //Initialize the Aepp object 
-  client = await Ae.Aepp();
-  contractInstance = await client.getContractInstance(contractSource, {contractAddress});
-  
-  // Make a call to fetch all twaets available on the blockchain
-  twaetData = (await contractInstance.methods.getAllTwaets()).decodedResult;
+  // fetch data from the blockchain
+  twaetData = fetchData();
 
   // check if data is returned
   if(twaetData){
@@ -232,8 +241,8 @@ submitBtn.addEventListener('click', async function(e){
   // update data on the blockchain
   await contractInstance.methods.tipTwaet(twaetId, {amount: tipAmount})
   .then(()=>{
-    // refetch data from the blockchain
-    twaetData = (await contractInstance.methods.getAllTwaets()).decodedResult;
+    // refetch data from the 
+    twaetData = fetchData();
     // display the new data
     renderTwaets();
     // hide spinner
@@ -283,7 +292,7 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value)
     .then(()=>{
       // refetch data from the blockchain
-      twaetData = (await contractInstance.methods.getAllTwaets()).decodedResult;
+      twaetData = fetchData();
       
       // clear form entries
       nameEntry.value =''; avatarEntry.value = ''; twaetEntry.value = '';
