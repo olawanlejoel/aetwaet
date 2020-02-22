@@ -96,7 +96,7 @@ async function fetchData(){
 }
 
 window.addEventListener('load', async function(){
-  console.log('Displaying up-to-date file -v2.1');
+  console.log('Displaying up-to-date file -v2.2');
 
   // Display the spinner modal
   toggleSpinner(true);
@@ -238,7 +238,7 @@ submitBtn.addEventListener('click', async function(e){
     return false;
   }
   // check if entry is zero or less than zero
-  else if(twaetInput.value <== 0 ){
+  else if(twaetInput.value <= 0 ){
     twaetInput.setAttribute('placeholder', 'You cannot tip with 0 or a value less than 0');
     return false;
   } else{
