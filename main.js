@@ -215,6 +215,7 @@ const createTwaetPanel = item=>{
   // Twaet Input
   let twaetInput = document.createElement('input');
   twaetInput.setAttribute('type', 'number');
+  twaetInput.setAttribute('required', '');
   twaetInput.id = 'tip-entry';
   twaetInput.setAttribute('placeholder', 'Enter tip');
   twaetAction.appendChild(twaetInput);
@@ -231,27 +232,38 @@ const createTwaetPanel = item=>{
   /* --------
 Attach a click event listener to all tip button in a twaet panel. This triggers a tipTwaet on the contract */
 submitBtn.addEventListener('click', async function(e){
-  // show spinner
-  toggleSpinner(true);
-  
-  // twaet info
-  let twaetId = twaetPanel.id;
-  let tipAmount = parseInt(twaetInput.value);
-   
-  // update data on the blockchain
-  await contractInstance.methods.tipTwaet(twaetId, {amount: tipAmount})
-  .then(()=>{
-    // refetch data from the 
-    twaetData = fetchData();
-    // display the new data
-    renderTwaets();
-    // hide spinner
-    toggleSpinner(false);
-  })
-  .catch(e => {
-    console.log(e);
+  // check if entry is a number
+  if(isNaN(twaetInput.value)){
+    twaetInput.setAttribute('placeholder', 'Your entry is not a number');
     return false;
-  });  
+  }
+  // check if entry is zero or less than zero
+  else if(twaetInput.value <== 0 ){
+    twaetInput.setAttribute('placeholder', 'You cannot tip with 0 or a value less than 0');
+    return false;
+  } else{
+    // show spinner
+    toggleSpinner(true);
+  
+    // twaet info
+    let twaetId = twaetPanel.id;
+    let tipAmount = parseInt(twaetInput.value.trim());
+   
+    // update data on the blockchain
+    await contractInstance.methods.tipTwaet(twaetId, {amount: tipAmount})
+      .then(()=>{
+        // refetch data from the 
+        twaetData = fetchData();
+        // display the new data
+        renderTwaets();
+        // hide spinner
+        toggleSpinner(false);
+      })
+      .catch(e => {
+        console.log(e);
+        return false;
+      });  
+  }
 });
 
   return twaetPanel;
@@ -288,7 +300,7 @@ document.querySelector('#twaet-form').addEventListener('submit', async function(
   let avatarEntry = document.querySelector('#avatar');
   let twaetEntry = document.querySelector('#twaet');
 	
-  await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value, avatarEntry.value, twaetEntry.value)
+  await contractInstance.methods.addTwaet(Date.now().toString(), nameEntry.value.trim(), avatarEntry.value.trim(), twaetEntry.value.trim())
     .then(()=>{
       // refetch data from the blockchain
       twaetData = fetchData();
