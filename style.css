@@ -160,6 +160,8 @@ form .btn {
   form .btn:hover {
     background: #2daae1;
     color: white; }
+  form .btn:focus{
+    box-shadow: 0 0 5px rgba(45,170,225,1)}
 
 .form__header {
   display: flex;
