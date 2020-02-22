@@ -90,7 +90,10 @@ async function fetchData(){
    contractInstance = await client.getContractInstance(contractSource, {contractAddress});
    
    // Make a call to fetch all twaets available on the blockchain
-    let data = (await contractInstance.methods.getAllTwaets()).decodedResult;
+   let data = (await contractInstance.methods.getAllTwaets()).decodedResult;
+   
+   //sort data according to total number of tips
+   data.sort((a, b)=> b[1].totalTips - a[1].totalTips);
 
   return data;
 }
