@@ -234,9 +234,14 @@ const createTwaetPanel = item=>{
 
   /* --------
 Attach a click event listener to all tip button in a twaet panel. This triggers a tipTwaet on the contract */
-submitBtn.addEventListener('click', async function(e){
+submitBtn.addEventListener('click', async function(e
+  // check for an empty submission
+  if(twaetInput.value === ''){
+    twaetInput.setAttribute('placeholder', 'Your cannot submit an empty value');
+    return false;
+  }	
   // check if entry is a number
-  if(isNaN(twaetInput.value)){
+  else if(isNaN(twaetInput.value)){
     twaetInput.setAttribute('placeholder', 'Your entry is not a number');
     return false;
   }
