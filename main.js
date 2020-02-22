@@ -99,7 +99,7 @@ async function fetchData(){
 }
 
 window.addEventListener('load', async function(){
-  console.log('Displaying up-to-date file -v2.2');
+  console.log('Displaying up-to-date file -v2.3');
 
   // Display the spinner modal
   toggleSpinner(true);
@@ -234,7 +234,7 @@ const createTwaetPanel = item=>{
 
   /* --------
 Attach a click event listener to all tip button in a twaet panel. This triggers a tipTwaet on the contract */
-submitBtn.addEventListener('click', async function(e
+submitBtn.addEventListener('click', async function(e){
   // check for an empty submission
   if(twaetInput.value === ''){
     twaetInput.setAttribute('placeholder', 'Your cannot submit an empty value');
