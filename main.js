@@ -96,7 +96,7 @@ async function fetchData(){
 	data.forEach(item => console.log(item[1].totalTips));
    
    //sort data according to total number of tips
-   data.sort((a, b)=> b[1].totalTips - a[1].totalTips);
+   data.sort((a, b)=> parseInt(b[1].totalTips) - parseInt(a[1].totalTips));
 	
 	console.log('------------------');
 	console.log(data);
