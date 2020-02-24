@@ -93,7 +93,7 @@ async function fetchData(){
    let data = (await contractInstance.methods.getAllTwaets()).decodedResult;
 	
   // log multple info to the console
-	data.forEach(item => item[1].totalTips);
+	data.forEach(item => console.log(item[1].totalTips));
    
    //sort data according to total number of tips
    data.sort((a, b)=> b[1].totalTips - a[1].totalTips);
