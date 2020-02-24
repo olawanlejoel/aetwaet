@@ -96,10 +96,14 @@ async function fetchData(){
 	data.forEach(item => console.log(item[1].totalTips));
    
    //sort data according to total number of tips
-   data.sort((a, b)=> parseInt(b[1].totalTips) - parseInt(a[1].totalTips));
+   let data2 = data.sort((a, b)=>{
+     if(parseInt(b[1].totalTips) > parseInt(a[1].totalTips)){ return 1;}
+     else{return -1;}
+   });
+       //data.sort((a, b)=> parseInt(b[1].totalTips) - parseInt(a[1].totalTips));
 	
 	console.log('------------------');
-	console.log(data);
+	console.log(data2);
 
   return data;
 }
