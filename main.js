@@ -95,13 +95,13 @@ async function fetchData(){
 }
 
 window.addEventListener('load', async function(){
-  console.log('Displaying up-to-date file -v2.3');
+  console.log('Displaying up-to-date file -v2.4');
 
   // Display the spinner modal
   toggleSpinner(true);
 
   // fetch data from the blockchain
-  twaetData = fetchData();
+  twaetData = await fetchData();
 
   // check if data is returned
   if(twaetData){
