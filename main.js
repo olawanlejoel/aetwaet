@@ -91,21 +91,7 @@ async function fetchData(){
    
    // Make a call to fetch all twaets available on the blockchain
    let data = (await contractInstance.methods.getAllTwaets()).decodedResult;
-	
-  // log multple info to the console
-	data.forEach(item => console.log(item[1].totalTips));
-   
-   //sort data according to total number of tips
-//    let data2 = (await data).sort((a, b)=>{
-//      if(parseInt(b[1].totalTips) > parseInt(a[1].totalTips)){ return 1;}
-//      else{return -1;}
-//    });
-       let data2 = (await data).sort((a, b)=> parseInt(b[1].totalTips) - parseInt(a[1].totalTips));
-	
-	console.log('------------------');
-	console.log(data2);
-
-  return data;
+   return data;
 }
 
 window.addEventListener('load', async function(){
@@ -292,7 +278,7 @@ The function renders the twaets panel */
 async function renderTwaets(){
    // map the content of twaetData to create twaet panels
    const docFrag = document.createDocumentFragment();
-   (await twaetData).sort().map(item =>{
+   (await twaetData).sort((a, b)=> parseInt(b[1].totalTips) - parseInt(a[1].totalTips)).map(item =>{
      docFrag.appendChild(createTwaetPanel(item))
    });
 
