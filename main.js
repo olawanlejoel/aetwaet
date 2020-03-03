@@ -5,6 +5,7 @@ payable contract AeTwaet =
   record twaet={
     writerAddress: address,
     name: string,
+    date: int,
     avatar: string,
     twaetBody: string,
     totalTips: int,
@@ -32,6 +33,7 @@ payable contract AeTwaet =
     let newTwaet = {
       writerAddress = Call.caller,
       name = name',
+      date = Chain.timestamp,
       avatar = avatar',
       twaetBody = twaet',
       totalTips = 0,
@@ -188,6 +190,13 @@ const createTwaetPanel = item=>{
     elementType: 'strong',
     elementClass: 'twaet__name',
     elementText: item[1].name
+  }));
+
+  // Twaet date
+  textContainer.appendChild(createNewElement({
+    elementType: 'span',
+    elementClass: 'twaet__date',
+    elementText: item[1].date
   }));
  
   // Twaet Content
