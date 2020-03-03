@@ -50,6 +50,7 @@ payable contract AeTwaet =
     let updatedTwaet ={
       writerAddress = twaet.writerAddress,
       name = twaet.name,
+      date = twaet.date,
       avatar = twaet.avatar,
       twaetBody = twaet.twaetBody,
       totalTips = newTotalTips,
@@ -58,7 +59,7 @@ payable contract AeTwaet =
 
 `;
 
-const contractAddress = 'ct_NXAxmKBnwDzCHRMw7MhQngacu4ECCvV7Ep3gFXPNg3kdNGJqy';
+const contractAddress = 'ct_2aKq9LrgmK2K1wVpFZ2ohvpyYMMoWLjaZEVH3tps7x9fTcfpFJ';
 
 let client = null, contractInstance = null, twaetData = [];
 
