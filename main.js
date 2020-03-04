@@ -197,7 +197,7 @@ const createTwaetPanel = item=>{
   textContainer.appendChild(createNewElement({
     elementType: 'span',
     elementClass: 'twaet__date',
-    elementText: item[1].date
+    elementText: new Date(item[1].date)
   }));
  
   // Twaet Content
